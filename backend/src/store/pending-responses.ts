@@ -15,7 +15,7 @@ export function waitForEngineResponse(
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
       pendingResponses.delete(correlationId);
-      reject(new Error("Engine response timed out"));
+      resolve({ correlationId, ok: false, error: "engine_timeout" });
     }, timeoutMs);
 
     pendingResponses.set(correlationId, {
