@@ -11,7 +11,7 @@ export type EngineCommandType =
 
 export interface EngineRequest {
   correlationId: string;
-  responseQueue: string;
+  replyQueue: string;
   type: EngineCommandType;
   payload: Record<string, unknown>;
 }
@@ -107,13 +107,13 @@ for (;;) {
 
   try {
     const data = handleEngineRequest(message);
-    await sendResponse(message.responseQueue, {
+    await sendResponse(message.replyQueue, {
       correlationId: message.correlationId,
       ok: true,
       data,
     });
   } catch (error) {
-    await sendResponse(message.responseQueue, {
+    await sendResponse(message.replyQueue, {
       correlationId: message.correlationId,
       ok: false,
       error: error instanceof Error ? error.message : "engine_error",
