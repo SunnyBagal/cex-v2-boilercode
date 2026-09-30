@@ -4,11 +4,7 @@ import {
   resolveEngineResponse,
   waitForEngineResponse,
 } from "../store/pending-responses.js";
-import type {
-  EngineCommandType,
-  EngineRequest,
-  EngineResponse,
-} from "../types/engine.js";
+import type { EngineCommandType, EngineResponse } from "../types/engine.js";
 
 const publisher = createClient({ url: env.redisUrl }).on("error", (error) => {
   console.error("Redis publisher error", error);
@@ -33,10 +29,10 @@ export async function sendToEngine(
   const correlationId = crypto.randomUUID();
   const responsePromise = waitForEngineResponse(correlationId, env.engineTimeoutMs);
 
-  const message: EngineRequest = {
+  const message = {
     correlationId,
     responseQueue: env.responseQueue,
-    type,
+    command: type,
     payload,
   };
 
